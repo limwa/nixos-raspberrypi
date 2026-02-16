@@ -1,56 +1,56 @@
-self: super: { # final: prev:
+final: prev: { # final: prev:
 
-  ffmpeg = self.ffmpeg_7;
-  ffmpeg-headless = self.ffmpeg_7-headless;
-  ffmpeg-full = self.ffmpeg_7-full;
+  ffmpeg = final.ffmpeg_7;
+  ffmpeg-headless = final.ffmpeg_7-headless;
+  ffmpeg-full = final.ffmpeg_7-full;
 
-  ffmpeg_4 = (super.callPackage ../pkgs/ffmpeg_4-rpi.nix {
-    ffmpeg = super.ffmpeg;
+  ffmpeg_4 = (prev.callPackage ../pkgs/ffmpeg_4-rpi.nix {
+    ffmpeg = prev.ffmpeg;
   }); # small
-  ffmpeg_4-headless = self.ffmpeg_4.override {
+  ffmpeg_4-headless = final.ffmpeg_4.override {
     ffmpegVariant = "headless";
   };
-  ffmpeg_4-full = self.ffmpeg_4.override {
+  ffmpeg_4-full = final.ffmpeg_4.override {
     ffmpegVariant = "full";
   };
 
-  ffmpeg_5 = (super.callPackage ../pkgs/ffmpeg_5-rpi.nix {
-    ffmpeg = super.ffmpeg;
+  ffmpeg_5 = (prev.callPackage ../pkgs/ffmpeg_5-rpi.nix {
+    ffmpeg = prev.ffmpeg;
   }); # small
-  ffmpeg_5-headless = self.ffmpeg_5.override {
+  ffmpeg_5-headless = final.ffmpeg_5.override {
     ffmpegVariant = "headless";
   };
-  ffmpeg_5-full = self.ffmpeg_5.override {
+  ffmpeg_5-full = final.ffmpeg_5.override {
     ffmpegVariant = "full";
   };
 
-  ffmpeg_6 = (super.callPackage ../pkgs/ffmpeg_6-rpi.nix {
-    ffmpeg = super.ffmpeg;
+  ffmpeg_6 = (prev.callPackage ../pkgs/ffmpeg_6-rpi.nix {
+    ffmpeg = prev.ffmpeg;
   }); # small
-  ffmpeg_6-headless = self.ffmpeg_6.override {
+  ffmpeg_6-headless = final.ffmpeg_6.override {
     ffmpegVariant = "headless";
   };
-  ffmpeg_6-full = self.ffmpeg_6.override {
+  ffmpeg_6-full = final.ffmpeg_6.override {
     ffmpegVariant = "full";
   };
 
-  ffmpeg_7 = (super.callPackage ../pkgs/ffmpeg_7-rpi.nix {
-    ffmpeg = super.ffmpeg;
+  ffmpeg_7 = (prev.callPackage ../pkgs/ffmpeg_7-rpi.nix {
+    ffmpeg = prev.ffmpeg;
   }); # small
-  ffmpeg_7-headless = self.ffmpeg_7.override {
+  ffmpeg_7-headless = final.ffmpeg_7.override {
     ffmpegVariant = "headless";
   };
-  ffmpeg_7-full = self.ffmpeg_7.override {
+  ffmpeg_7-full = final.ffmpeg_7.override {
     ffmpegVariant = "full";
   };
 
 
-  kodi = (super.kodi.overrideAttrs (old: {
+  kodi = (prev.kodi.overrideAttrs (old: {
     pname = old.pname + "-rpi";
-    buildInputs = old.buildInputs ++ [ self.dav1d ];
+    buildInputs = old.buildInputs ++ [ final.dav1d ];
     cmakeFlags = let
       enableFeature = enable: feature:
-        assert (super.lib.isString feature);
+        assert (prev.lib.isString feature);
         "-DENABLE_${feature}=${if enable then "ON" else "OFF"}";
     in old.cmakeFlags ++ [
       "-DENABLE_INTERNAL_DAV1D=OFF"
@@ -70,24 +70,24 @@ self: super: { # final: prev:
     vdpauSupport = false;
   };
 
-  kodi-gbm = self.kodi.override {
+  kodi-gbm = final.kodi.override {
     gbmSupport = true;
   };
 
-  kodi-wayland = self.kodi.override {
+  kodi-wayland = final.kodi.override {
     waylandSupport = true;
     # nixos defaults to "gl" for wayland, but libreelec uses "gles"
     # renderSystem = "gles";
   };
 
 
-  libcamera = self.libcamera_rpi;
+  libcamera = final.libcamera_rpi;
 
-  libcamera_rpi = super.libcamera.overrideAttrs (old: rec {
+  libcamera_rpi = prev.libcamera.overrideAttrs (old: rec {
     pname = old.pname + "-rpi";
     version = "0.6.0+rpt20251202";
 
-    src = super.fetchFromGitHub {
+    src = prev.fetchFromGitHub {
       owner = "raspberrypi";
       repo = "libcamera";
       rev = "v${version}";
@@ -103,7 +103,7 @@ self: super: { # final: prev:
       "-Dtest=false"
       "-Dcam=disabled"
       "-Dpycamera=enabled"
-      (super.lib.mesonEnable "libunwind" false)
+      (prev.lib.mesonEnable "libunwind" false)
     ];
 
     meta = old.meta // {
@@ -112,12 +112,12 @@ self: super: { # final: prev:
     };
   });
 
-  vlc = super.vlc.overrideAttrs (old: {
+  vlc = prev.vlc.overrideAttrs (old: {
     pname = old.pname + "-rpi";
     version = "3.0.22-0+rpt1";
 
     # https://github.com/RPi-Distro/vlc/commits/pios/trixie
-    src = super.fetchFromGitHub {
+    src = prev.fetchFromGitHub {
       owner = "RPi-Distro";
       repo = "vlc";
       rev = "1e4f72f9f7af4de546c90062c248f6174af69f28";

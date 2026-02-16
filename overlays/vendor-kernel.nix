@@ -48,15 +48,15 @@ let
     };
   in map linuxVersionForModel models;
 
-in self: super: super.lib.mergeAttrsList (
+in final: prev: prev.lib.mergeAttrsList (
   builtins.concatLists [
-    (mkLinuxFor super "6_12_44" [ "02" "3" "4" "5" ])
-    (mkLinuxFor super "6_12_34" [ "02" "3" "4" "5" ])
-    (mkLinuxFor super "6_12_25" [ "02" "3" "4" "5" ])
-    (mkLinuxFor super "6_6_74" [ "02" "4" "5" ])
-    (mkLinuxFor super "6_6_51" [ "02" "4" "5" ])
-    (mkLinuxFor super "6_6_31" [ "4" "5" ])
-    (mkLinuxFor super "6_6_28" [ "4" "5" ])
-    (mkLinuxFor super "6_1_73" [ "4" "5" ])
-    (mkLinuxFor super "6_1_63" [ "4" "5" ])
+    (mkLinuxFor prev "6_12_44" [ "02" "3" "4" "5" ])
+    (mkLinuxFor prev "6_12_34" [ "02" "3" "4" "5" ])
+    (mkLinuxFor prev "6_12_25" [ "02" "3" "4" "5" ])
+    (mkLinuxFor prev "6_6_74" [ "02" "4" "5" ])
+    (mkLinuxFor prev "6_6_51" [ "02" "4" "5" ])
+    (mkLinuxFor prev "6_6_31" [ "4" "5" ])
+    (mkLinuxFor prev "6_6_28" [ "4" "5" ])
+    (mkLinuxFor prev "6_1_73" [ "4" "5" ])
+    (mkLinuxFor prev "6_1_63" [ "4" "5" ])
   ])
