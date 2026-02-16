@@ -50,6 +50,8 @@
       };
     mkLegacyPackagesFor = nixpkgs: forSystems rpiSystems (mkRpiPkgs nixpkgs);
   in {
+    
+    formatter = forSystems allSystems (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
 
     devShells = forSystems allSystems (system: let
       pkgs = nixpkgs.legacyPackages.${system};
