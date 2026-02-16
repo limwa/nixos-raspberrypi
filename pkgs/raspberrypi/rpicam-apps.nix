@@ -38,19 +38,23 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config
+    meson
+    ninja
+    pkg-config
   ] ++ lib.optional withQtPreview qt5.wrapQtAppsHook;
 
   buildInputs = [
     boost
     libexif
     libcamera
-    libdrm  # needed even with drm preview disabled
-    libjpeg libpng libtiff
+    libdrm # needed even with drm preview disabled
+    libjpeg
+    libpng
+    libtiff
   ] ++ lib.optionals withLibavEncoder [ ffmpeg ]
-    ++ lib.optionals withQtPreview (with qt5; [ qtbase qttools ])
-    ++ lib.optionals withEglPreview [ libepoxy libX11 libGL ]
-    ++ lib.optionals withOpenCVPostProc [ opencv ];
+  ++ lib.optionals withQtPreview (with qt5; [ qtbase qttools ])
+  ++ lib.optionals withEglPreview [ libepoxy libX11 libGL ]
+  ++ lib.optionals withOpenCVPostProc [ opencv ];
 
   # https://github.com/raspberrypi/rpicam-apps/blob/main/meson_options.txt
   mesonFlags = [

@@ -16,7 +16,8 @@ let
       raspberrypiWirelessFirmware = wFw;
     });
   };
-in final: prev: {
+in
+final: prev: {
 
   inherit (final.linuxAndFirmware.default)
     linux_rpi5 linuxPackages_rpi5

@@ -25,9 +25,11 @@
   boot.loader.raspberry-pi.bootloader = lib.mkIf
     (config.boot.loader.raspberry-pi.variant == "5") "kernel";
 
-  image.baseName = let
-    cfg = config.boot.loader.raspberry-pi;
-  in "nixos-image-rpi${cfg.variant}-${cfg.bootloader}";
+  image.baseName =
+    let
+      cfg = config.boot.loader.raspberry-pi;
+    in
+    "nixos-image-rpi${cfg.variant}-${cfg.bootloader}";
 
   sdImage = {
     # this needs to be big enough to accomodate all kernels and initrds of previous generations

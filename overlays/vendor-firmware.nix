@@ -250,14 +250,16 @@ final: prev: {
   raspberrypiWirelessFirmware_20231115 = prev.raspberrypiWirelessFirmware.overrideAttrs (old: {
     version = "unstable-2023-11-15";
     srcs = [
-      (prev.fetchFromGitHub {  # 1.2-9+rpt2 release – 20231024
+      (prev.fetchFromGitHub {
+        # 1.2-9+rpt2 release – 20231024
         name = "bluez-firmware";
         owner = "RPi-Distro";
         repo = "bluez-firmware";
         rev = "d9d4741caba7314d6500f588b1eaa5ab387a4ff5";
         hash = "sha256-CjbZ3t3TW/iJ3+t9QKEtM9NdQU7SwcUCDYuTmFEwvhU=";
       })
-      (prev.fetchFromGitHub {  # 1:20230210-5+rpt2 release - 20231115
+      (prev.fetchFromGitHub {
+        # 1:20230210-5+rpt2 release - 20231115
         name = "firmware-nonfree";
         owner = "RPi-Distro";
         repo = "firmware-nonfree";

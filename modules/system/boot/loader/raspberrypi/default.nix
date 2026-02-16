@@ -123,7 +123,7 @@ let
   };
 
   # Builders exposed via populateCmd, which run on the build architecture
-  populateFirmwareBuilder = import  ./firmware-builder.nix {
+  populateFirmwareBuilder = import ./firmware-builder.nix {
     pkgs = pkgs.buildPackages;
     configTxt = cfg.configTxtPackage;
     firmware = cfg.firmwarePackage;
@@ -181,14 +181,17 @@ let
       firmware = "${populateKernelbootBuilder}";
       boot = "${populateKernelbootBuilder}";
     };
-    kernel = let cmd = builtins.concatStringsSep " " [
-      "${mkBootloader pkgs.buildPackages}"
-      "-g ${toString cfg.configurationLimit}"
-    ];
-    in {
-      firmware = "${cmd}";
-      boot = "${cmd}";
-    };
+    kernel =
+      let
+        cmd = builtins.concatStringsSep " " [
+          "${mkBootloader pkgs.buildPackages}"
+          "-g ${toString cfg.configurationLimit}"
+        ];
+      in
+      {
+        firmware = "${cmd}";
+        boot = "${cmd}";
+      };
   };
 in
 
@@ -259,8 +262,9 @@ in
       };
 
       useGenerationDeviceTree = mkOption {
-        default = if cfg.bootloader == "kernel" then true
-                  else false;  # generic-extlinux-compatible defaults to `true`
+        default =
+          if cfg.bootloader == "kernel" then true
+          else false; # generic-extlinux-compatible defaults to `true`
         type = types.bool;
         description = ''
           Whether to use device tree supplied by:
@@ -413,16 +417,18 @@ in
           The "-legacy-unsupported" suffix will silence this warning until the final deletion.
         '';
 
-      assertions = let
-        supportAarch64 = [ "02" "3" "4" "5" ];
-      in singleton {
-        assertion = !pkgs.stdenv.hostPlatform.isAarch64
-                    || builtins.elem cfg.variant supportAarch64;
-        message = ''
-          Only Raspberry Pi versions
-          ${builtins.concatStringsSep ", " supportAarch64} support aarch64.
-        '';
-      };
+      assertions =
+        let
+          supportAarch64 = [ "02" "3" "4" "5" ];
+        in
+        singleton {
+          assertion = !pkgs.stdenv.hostPlatform.isAarch64
+            || builtins.elem cfg.variant supportAarch64;
+          message = ''
+            Only Raspberry Pi versions
+            ${builtins.concatStringsSep ", " supportAarch64} support aarch64.
+          '';
+        };
       boot.loader.grub.enable = false;
       boot.loader.raspberry-pi.firmwarePopulateCmd = populateCmds.${cfg.bootloader}.firmware;
       boot.loader.raspberry-pi.bootPopulateCmd = populateCmds.${cfg.bootloader}.boot;
@@ -463,14 +469,16 @@ in
           };
         };
       };
-      hardware.raspberry-pi.extra-config = let
-        # https://www.raspberrypi.com/documentation/computers/config_txt.html#initramfs
-        ramfsfile = "initrd";
-        ramfsaddr = "followkernel"; # same as 0 = "after the kernel image"
-      in ''
-        [all]
-        initramfs ${ramfsfile} ${ramfsaddr}
-      '';
+      hardware.raspberry-pi.extra-config =
+        let
+          # https://www.raspberrypi.com/documentation/computers/config_txt.html#initramfs
+          ramfsfile = "initrd";
+          ramfsaddr = "followkernel"; # same as 0 = "after the kernel image"
+        in
+        ''
+          [all]
+          initramfs ${ramfsfile} ${ramfsaddr}
+        '';
 
       system = {
         build.installBootLoader = builder.${cfg.bootloader};

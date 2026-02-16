@@ -1,4 +1,5 @@
-final: prev: { # final: prev:
+final: prev: {
+  # final: prev:
 
   ffmpeg = final.ffmpeg_7;
   ffmpeg-headless = final.ffmpeg_7-headless;
@@ -48,24 +49,26 @@ final: prev: { # final: prev:
   kodi = (prev.kodi.overrideAttrs (old: {
     pname = old.pname + "-rpi";
     buildInputs = old.buildInputs ++ [ final.dav1d ];
-    cmakeFlags = let
-      enableFeature = enable: feature:
-        assert (prev.lib.isString feature);
-        "-DENABLE_${feature}=${if enable then "ON" else "OFF"}";
-    in old.cmakeFlags ++ [
-      "-DENABLE_INTERNAL_DAV1D=OFF"
-    ] ++ [
-      # inspired by being hardcoded in libreelec
-      # leaving because this is potentially due to performance considerations
-      "-DENABLE_LCMS2=OFF"
-    ] ++ [
-      (enableFeature true  "NEON")
-      (enableFeature false "VAAPI")
-    ] ++ [
-      "-DENABLE_CEC=ON"
-      "-DENABLE_AVAHI=ON"
-      #-DAPP_RENDER_SYSTEM=
-    ];
+    cmakeFlags =
+      let
+        enableFeature = enable: feature:
+          assert (prev.lib.isString feature);
+          "-DENABLE_${feature}=${if enable then "ON" else "OFF"}";
+      in
+      old.cmakeFlags ++ [
+        "-DENABLE_INTERNAL_DAV1D=OFF"
+      ] ++ [
+        # inspired by being hardcoded in libreelec
+        # leaving because this is potentially due to performance considerations
+        "-DENABLE_LCMS2=OFF"
+      ] ++ [
+        (enableFeature true "NEON")
+        (enableFeature false "VAAPI")
+      ] ++ [
+        "-DENABLE_CEC=ON"
+        "-DENABLE_AVAHI=ON"
+        #-DAPP_RENDER_SYSTEM=
+      ];
   })).override {
     vdpauSupport = false;
   };

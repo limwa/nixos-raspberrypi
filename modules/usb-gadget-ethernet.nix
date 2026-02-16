@@ -4,7 +4,7 @@
   hardware.raspberry-pi.config.all.dt-overlays = {
     dwc2 = {
       enable = true;
-      params = {};
+      params = { };
     };
   };
 
@@ -18,8 +18,8 @@
     "net.ipv4.conf.all.ignore_routes_with_linkdown" = 1;
   };
 
-  networking.interfaces.usb0.ipv4.addresses = lib.mkDefault [ {
+  networking.interfaces.usb0.ipv4.addresses = lib.mkDefault [{
     address = "10.0.0.2";
     prefixLength = 24;
-  } ];
+  }];
 }
